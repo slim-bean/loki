@@ -144,6 +144,16 @@ touch-protobuf-sources:
 		touch $$def; \
 	done
 
+###############
+# Fingerprint #
+###############
+
+fingerprint: cmd/fingerprint/fingerprint
+
+cmd/fingerprint/fingerprint: $(APP_GO_FILES) cmd/fingerprint/main.go
+	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
+	$(NETGO_CHECK)
+
 ##########
 # Logcli #
 ##########
@@ -497,6 +507,11 @@ define push-image
 	$(call push,$(1),master)
 	$(call push,$(1),latest)
 endef
+
+
+# fingerprint-image
+fingerprint-image:
+	$(SUDO) docker build -t $(IMAGE_PREFIX)/loki-fingerprint:$(IMAGE_TAG) -f cmd/fingerprint/Dockerfile .
 
 # promtail
 promtail-image:
