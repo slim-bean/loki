@@ -326,7 +326,7 @@ func (t *Loki) initStore() (_ services.Service, err error) {
 		switch t.cfg.Target {
 		case Querier, Ruler:
 			// Do not use the AsyncStore if the querier is configured with QueryStoreOnly set to true
-			if t.Cfg.Querier.QueryStoreOnly {
+			if t.cfg.Querier.QueryStoreOnly {
 				break
 			}
 			// Use AsyncStore to query both ingesters local store and chunk store for store queries.
